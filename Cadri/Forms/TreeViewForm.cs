@@ -40,7 +40,7 @@ namespace Cadri.UI.Forms
                 }
             }
 
-            treeView1.Nodes.Add("-1","Бывшые сотрудники");
+            treeView1.Nodes.Add("-1","Бывшие сотрудники");
             foreach (var employee in cadri.Employees)
             {
                 if (employee.CurrentOfficeId != null)

@@ -79,6 +79,11 @@ namespace Cadri.UI.Forms
 
         private async Task EditOffice_ClickAsync(object sender, EventArgs e)
         {
+            if (officesGridView.RowCount < 1)
+            {
+                MessageBox.Show("Отсутствуют подразделения для редактирования");
+                return;
+            }
             if (officeForm == null || officeForm.IsDisposed)
             {
                 officeForm = new OfficeForm(true, (Office) officesGridView.SelectedRows[0].DataBoundItem);
@@ -124,6 +129,11 @@ namespace Cadri.UI.Forms
 
         private async Task CloseOffice_Click(object sender, EventArgs e)
         {
+            if (officesGridView.RowCount < 1)
+            {
+                MessageBox.Show("Отсутствуют подразделения для закрытия");
+                return;
+            }
             try
             {
                 await officeRepository.CloseOffice((Office) officesGridView.SelectedRows[0].DataBoundItem);
@@ -136,9 +146,18 @@ namespace Cadri.UI.Forms
 
         private async Task RestoreOffice_ClickAsync(object sender, EventArgs e)
         {
+            if (officesGridView.RowCount < 1)
+            {
+                MessageBox.Show("Отсутствуют подразделения для восстановления работы");
+                return;
+            }
             var office = (Office) officesGridView.SelectedRows[0].DataBoundItem;
             if (office.Closed)
                 await officeRepository.RestoreOffice(office);
+            else
+            {
+                MessageBox.Show("Подразделение не закрыто и не нуждается в восстановлении.");
+            }
         }
     }
 

@@ -25,6 +25,11 @@ namespace Cadri.DataLayer.Repository
             return CadriDb.Offices.Local.ToBindingList();
         }
 
+        public async Task<bool> CheckAnyOffice()
+        {
+            return await CadriDb.Offices.AnyAsync();
+        }
+
         public async Task AddOfficeAsync(Office office)
         {
             await CadriDb.Offices.AddAsync(office);

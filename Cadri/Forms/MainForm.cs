@@ -8,6 +8,7 @@ namespace Cadri.UI
     public partial class MainForm : Form
     {
         private EmployeeRepository employeeRepository = new();
+        private OfficeRepository officeRepository = new();
         private EmployeeForm _employeeForm;
         
         public MainForm()
@@ -33,26 +34,42 @@ namespace Cadri.UI
 
         private void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            EditEmployee((Employee) dataGridView1.SelectedRows[0].DataBoundItem);
+            if (dataGridView1.RowCount < 1) return;
+                EditEmployee((Employee) dataGridView1.SelectedRows[0].DataBoundItem);
         }
 
-        private void Employ_Click(object sender, EventArgs e)
+        private async void Employ_Click(object sender, EventArgs e)
         {
+            if (!(await officeRepository.CheckAnyOffice()))
+            {
+                MessageBox.Show("Невозможно устроить нового работника.\nНет подразделений.");
+                return;
+            }
             AddEmployee();
         }
 
         private void TransferEmployee_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.RowCount < 1)
+            {
+                MessageBox.Show("Некого переводить");
+                return;
+            }
             EditEmployee((Employee)dataGridView1.SelectedRows[0].DataBoundItem);
         }
 
         private async void Dismiss_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.RowCount < 1)
+            {
+                MessageBox.Show("Некого увольнять");
+                return;
+            }
             var employee = (Employee) dataGridView1.SelectedRows[0].DataBoundItem;
             if (MessageBox.Show($"Вы уверены, что хотите уволить {employee.FIO}", "Внимание",
                     MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                await DismissEmployeeAsync(employee);
+                await employeeRepository.DismissEmployeeAsync(employee);
             }
         }
 
@@ -76,11 +93,6 @@ namespace Cadri.UI
             _employeeForm.Disposed += async (s, e) => await ReloadDataGridAsync();
             _employeeForm.ShowDialog();
             _employeeForm.Focus();
-        }
-
-        public async Task DismissEmployeeAsync(Employee employee)
-        {
-            await employeeRepository.DismissEmployeeAsync(employee);
         }
     }
 }
