@@ -43,13 +43,13 @@
             this.AddOffice = new System.Windows.Forms.ToolStripMenuItem();
             this.EditOffice = new System.Windows.Forms.ToolStripMenuItem();
             this.CloseOffice = new System.Windows.Forms.ToolStripMenuItem();
+            this.RestoreOffice = new System.Windows.Forms.ToolStripMenuItem();
             this.employees_listbox = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.fromDatePicker = new System.Windows.Forms.DateTimePicker();
             this.toDatePicker = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.RestoreOffice = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.officesGridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -190,11 +190,17 @@
             this.EditOffice.Size = new System.Drawing.Size(235, 22);
             this.EditOffice.Text = "Изменить подразделение";
             // 
-            // CloseOffice
+            // CloseOfficeAsync
             // 
             this.CloseOffice.Name = "CloseOffice";
             this.CloseOffice.Size = new System.Drawing.Size(235, 22);
             this.CloseOffice.Text = "Закрыть подразделение";
+            // 
+            // RestoreOfficeAsync
+            // 
+            this.RestoreOffice.Name = "RestoreOffice";
+            this.RestoreOffice.Size = new System.Drawing.Size(235, 22);
+            this.RestoreOffice.Text = "Восстановить подразделение";
             // 
             // employees_listbox
             // 
@@ -256,12 +262,6 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "До";
             // 
-            // RestoreOffice
-            // 
-            this.RestoreOffice.Name = "RestoreOffice";
-            this.RestoreOffice.Size = new System.Drawing.Size(235, 22);
-            this.RestoreOffice.Text = "Восстановить подразделение";
-            // 
             // OfficesListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -277,6 +277,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "OfficesListForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OfficesListForm";
             ((System.ComponentModel.ISupportInitialize)(this.officesGridView)).EndInit();
             this.menuStrip1.ResumeLayout(false);

@@ -1,3 +1,5 @@
+using Cadri.UI.Forms;
+
 namespace Cadri.UI
 {
     internal static class Program

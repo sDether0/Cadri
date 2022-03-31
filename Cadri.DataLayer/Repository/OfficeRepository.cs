@@ -25,7 +25,7 @@ namespace Cadri.DataLayer.Repository
             return CadriDb.Offices.Local.ToBindingList();
         }
 
-        public async Task<bool> CheckAnyOffice()
+        public async Task<bool> CheckAnyOfficeAsync()
         {
             return await CadriDb.Offices.AnyAsync();
         }
@@ -43,7 +43,7 @@ namespace Cadri.DataLayer.Repository
             await CadriDb.SaveChangesAsync();
         }
 
-        public async Task CloseOffice(Office office)
+        public async Task CloseOfficeAsync(Office office)
         {
             if (await CadriDb.Employees.AnyAsync(x => x.CurrentOfficeId == office.Id)) throw new Exception("Невозможно закрыть подразделение, в котором есть работающие сотрудники.");
             if (office.ChildOffices!=null && office.ChildOffices.Any(x=>!x.Closed)) throw new Exception("Невозможно закрыть подразделение, у которого есть дочерние подразделения.");
@@ -53,7 +53,7 @@ namespace Cadri.DataLayer.Repository
             await CadriDb.SaveChangesAsync();
         }
 
-        public async Task RestoreOffice(Office office)
+        public async Task RestoreOfficeAsync(Office office)
         {
             office.Closed= false;
             CadriDb.Entry(office).State = EntityState.Modified;

@@ -1,98 +1,53 @@
-using Cadri.DataLayer.DataBase;
-using Cadri.DataLayer.Repository;
-using Cadri.UI.Forms;
-using Microsoft.EntityFrameworkCore;
+п»їusing System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace Cadri.UI
+namespace Cadri.UI.Forms
 {
     public partial class MainForm : Form
     {
-        private EmployeeRepository employeeRepository = new();
-        private OfficeRepository officeRepository = new();
-        private EmployeeForm _employeeForm;
-        
+        EmployeesListForm employeesListForm ;
+        OfficesListForm officesListForm ;
+        TreeViewForm treeViewForm ;
         public MainForm()
         {
             InitializeComponent();
         }
 
-        private async void Form1_Load(object sender, EventArgs e)
+        private void EmployeesList_bt_Click(object sender, EventArgs e)
         {
-            await ReloadDataGridAsync();
-        }
-
-        private async Task ReloadDataGridAsync()
-        {
-            dataGridView1.DataSource = await employeeRepository.GetBindingEmployeesAsync();
-        }
-        
-        private void button2_Click(object sender, EventArgs e)
-        {
-            (new TreeViewForm()).ShowDialog();
-
-        }
-
-        private void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (dataGridView1.RowCount < 1) return;
-                EditEmployee((Employee) dataGridView1.SelectedRows[0].DataBoundItem);
-        }
-
-        private async void Employ_Click(object sender, EventArgs e)
-        {
-            if (!(await officeRepository.CheckAnyOffice()))
+            if (employeesListForm == null || employeesListForm.IsDisposed)
             {
-                MessageBox.Show("Невозможно устроить нового работника.\nНет подразделений.");
-                return;
+                employeesListForm = new();
             }
-            AddEmployee();
+            employeesListForm.Show();
+            employeesListForm.Focus();
         }
 
-        private void TransferEmployee_Click(object sender, EventArgs e)
+        private void OfficesList_bt_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.RowCount < 1)
+            if (officesListForm == null || officesListForm.IsDisposed)
             {
-                MessageBox.Show("Некого переводить");
-                return;
+                officesListForm = new();
             }
-            EditEmployee((Employee)dataGridView1.SelectedRows[0].DataBoundItem);
+            officesListForm.Show();
+            officesListForm.Focus();
         }
 
-        private async void Dismiss_Click(object sender, EventArgs e)
+        private void CompanyTree_bt_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.RowCount < 1)
+            if (treeViewForm == null || treeViewForm.IsDisposed)
             {
-                MessageBox.Show("Некого увольнять");
-                return;
+                treeViewForm = new();
             }
-            var employee = (Employee) dataGridView1.SelectedRows[0].DataBoundItem;
-            if (MessageBox.Show($"Вы уверены, что хотите уволить {employee.FIO}", "Внимание",
-                    MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                await employeeRepository.DismissEmployeeAsync(employee);
-            }
-        }
-
-        private void Offices_Click(object sender, EventArgs e)
-        {
-            (new OfficesListForm()).ShowDialog();
-        }
-        public void AddEmployee()
-        {
-            if (_employeeForm == null || _employeeForm.IsDisposed)
-                _employeeForm = new();
-            _employeeForm.Disposed += async (s, e) => await ReloadDataGridAsync();
-            _employeeForm.ShowDialog();
-            _employeeForm.Focus();
-        }
-
-        public void EditEmployee(Employee employee)
-        {
-            if (_employeeForm == null || _employeeForm.IsDisposed)
-                _employeeForm = new(true, employee);
-            _employeeForm.Disposed += async (s, e) => await ReloadDataGridAsync();
-            _employeeForm.ShowDialog();
-            _employeeForm.Focus();
+            treeViewForm.Show();
+            treeViewForm.Focus();
         }
     }
 }

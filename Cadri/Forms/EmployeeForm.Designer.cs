@@ -36,8 +36,7 @@
             this.thirdNameLabel = new System.Windows.Forms.Label();
             this.office_cm = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.Employ = new System.Windows.Forms.Button();
-            this.Transfer = new System.Windows.Forms.Button();
+            this.Submit_bt = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // firstNameLabel
@@ -105,32 +104,21 @@
             this.label4.TabIndex = 7;
             this.label4.Text = "Подразделение";
             // 
-            // Employ
+            // Submit_bt
             // 
-            this.Employ.Location = new System.Drawing.Point(331, 73);
-            this.Employ.Name = "Employ";
-            this.Employ.Size = new System.Drawing.Size(82, 23);
-            this.Employ.TabIndex = 8;
-            this.Employ.Text = "Устроить";
-            this.Employ.UseVisualStyleBackColor = true;
-            // 
-            // Transfer
-            // 
-            this.Transfer.Location = new System.Drawing.Point(242, 73);
-            this.Transfer.Name = "Transfer";
-            this.Transfer.Size = new System.Drawing.Size(83, 23);
-            this.Transfer.TabIndex = 9;
-            this.Transfer.Text = "Перевести";
-            this.Transfer.UseVisualStyleBackColor = true;
-            this.Transfer.Visible = false;
+            this.Submit_bt.Location = new System.Drawing.Point(331, 73);
+            this.Submit_bt.Name = "Submit_bt";
+            this.Submit_bt.Size = new System.Drawing.Size(82, 23);
+            this.Submit_bt.TabIndex = 8;
+            this.Submit_bt.Text = "Устроить";
+            this.Submit_bt.UseVisualStyleBackColor = true;
             // 
             // EmployeeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(448, 120);
-            this.Controls.Add(this.Transfer);
-            this.Controls.Add(this.Employ);
+            this.Controls.Add(this.Submit_bt);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.office_cm);
             this.Controls.Add(this.thirdname_tb);
@@ -140,6 +128,7 @@
             this.Controls.Add(this.firstname_tb);
             this.Controls.Add(this.firstNameLabel);
             this.Name = "EmployeeForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Информация о сотруднике";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddEmployeeForm_FormClosing);
             this.ResumeLayout(false);
@@ -157,7 +146,6 @@
         private Label thirdNameLabel;
         private ComboBox office_cm;
         private Label label4;
-        private Button Employ;
-        private Button Transfer;
+        private Button Submit_bt;
     }
 }

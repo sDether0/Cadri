@@ -23,13 +23,17 @@ namespace Cadri.UI.Forms
         {
             InitializeComponent();
             Subscribe();
+            employee = editEmployee??new();
+            SetFields(edit);
+            Binding();
+        }
+
+        private void SetFields(bool edit)
+        {
             firstname_tb.Enabled = !edit;
             lastname_tb.Enabled = !edit;
             thirdname_tb.Enabled = !edit;
-            Employ.Visible = !edit;
-            Transfer.Visible = edit;
-            employee = editEmployee??new();
-            Binding();
+            Submit_bt.Text = edit&&employee.WorkNow ? "Перевести" : "Устроить";
         }
 
         public void Binding()
@@ -43,14 +47,35 @@ namespace Cadri.UI.Forms
 
         private void Subscribe()
         {
-            Transfer.Click += async (s, e) => await Transfer_ClickAsync(s, e);
             Load += async (s, e) => await AddEmployeeForm_LoadAsync(s, e);
-            Employ.Click += async (s, e) => await Employ_ClickAsync(s, e);
+            Submit_bt.Click += async (s, e) => await Employ_ClickAsync(s, e);
         }
 
         private async Task Employ_ClickAsync(object sender, EventArgs e)
         {
-            bool error = false;
+            if (!edit)
+            {
+                bool error = false;
+                error = CheckValid(error);
+                if (error) return;
+                await employeeRepository.CreateEmployeeAsync(employee);
+            }
+            else
+            {
+                if (employee.WorkNow)
+                {
+                    await employeeRepository.TransferEmployeeAsync(employee);
+                }
+                else
+                {
+                    await employeeRepository.RestoreEmployeeAsync(employee);
+                }
+            }
+            Close();
+        }
+
+        private bool CheckValid(bool error)
+        {
             if (string.IsNullOrWhiteSpace(firstname_tb.Text))
             {
                 error = true;
@@ -60,6 +85,7 @@ namespace Cadri.UI.Forms
             {
                 firstNameLabel.ForeColor = Color.Black;
             }
+
             if (string.IsNullOrWhiteSpace(lastname_tb.Text))
             {
                 error = true;
@@ -69,6 +95,7 @@ namespace Cadri.UI.Forms
             {
                 lastNameLabel.ForeColor = Color.Black;
             }
+
             if (string.IsNullOrWhiteSpace(thirdname_tb.Text))
             {
                 error = true;
@@ -78,13 +105,8 @@ namespace Cadri.UI.Forms
             {
                 thirdNameLabel.ForeColor = Color.Black;
             }
-            if (error)
-            {
-                return;
-            }
-            await employeeRepository.CreateEmployee(employee);
-            Close();
-            
+
+            return error;
         }
 
         private async Task AddEmployeeForm_LoadAsync(object sender, EventArgs e)
@@ -98,11 +120,6 @@ namespace Cadri.UI.Forms
         {
             Dispose();
         }
-
-        private async Task Transfer_ClickAsync(object sender, EventArgs e)
-        {
-            await employeeRepository.TransferEmployeeAsync(employee);
-            Close();
-        }
+        
     }
 }

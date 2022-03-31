@@ -123,6 +123,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.name_tb);
             this.Name = "OfficeForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "OfficeForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OfficeForm_FormClosing);
             this.ResumeLayout(false);

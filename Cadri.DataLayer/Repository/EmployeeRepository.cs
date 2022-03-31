@@ -25,12 +25,12 @@ namespace Cadri.DataLayer.Repository
             return CadriDb.Employees.Local.ToBindingList();
         }
 
-        public async Task<List<Employee>> GetEmployeeByOffice(Office office)
+        public async Task<List<Employee>> GetEmployeeByOfficeAsync(Office office)
         {
-            return await GetEmployeeByOfficeAndDate(office,DateOnly.FromDateTime(DateTime.Today));
+            return await GetEmployeeByOfficeAndDateAsync(office,DateOnly.FromDateTime(DateTime.Today));
         }
 
-        public async Task<List<Employee>> GetEmployeeByOfficeAndDate(Office office, DateOnly from, DateOnly? to = null)
+        public async Task<List<Employee>> GetEmployeeByOfficeAndDateAsync(Office office, DateOnly from, DateOnly? to = null)
         {
             if (from > to) throw new Exception("Неверный интервал времени");
             if (from > DateOnly.FromDateTime(DateTime.Today)) throw new Exception("Интервал не может быть из будущего");
@@ -58,7 +58,7 @@ namespace Cadri.DataLayer.Repository
             return await CadriDb.Employees.Where(x => ids.Contains(x.Id)).ToListAsync();
 
         }
-        public async Task CreateEmployee(Employee employee)
+        public async Task CreateEmployeeAsync(Employee employee)
         {
             var employeeResult = await CadriDb.Employees.AddAsync(employee);
             await CadriDb.SaveChangesAsync();
@@ -72,32 +72,48 @@ namespace Cadri.DataLayer.Repository
             await CadriDb.SaveChangesAsync();
         }
 
+        public async Task RestoreEmployeeAsync(Employee employee)
+        {
+            CadriDb.Entry(employee).State = EntityState.Modified;
+            CadriDb.Employees.Update(employee);
+            await AddInfoToEmployeeAsync(employee);
+            await CadriDb.SaveChangesAsync();
+        }
+
         public async Task TransferEmployeeAsync(Employee employee)
         {
             CadriDb.Entry(employee).State = EntityState.Modified;
             CadriDb.Employees.Update(employee);
+            await CloseCurrentEmployeeInfoAsync(employee);
+            await AddInfoToEmployeeAsync(employee);
             await CadriDb.SaveChangesAsync();
-            var endInfo = await CadriDb.TransfersInfo.FirstOrDefaultAsync(x => x.EmployeeId == employee.Id && x.EndWork == null);
+        }
+
+        private async Task CloseCurrentEmployeeInfoAsync(Employee employee)
+        {
+            var endInfo =
+                await CadriDb.TransfersInfo.FirstOrDefaultAsync(x => x.EmployeeId == employee.Id && x.EndWork == null);
             if (endInfo == null) throw new Exception("Ошибка \"состояния\" сотрудника");
             endInfo.EndWork = DateOnly.FromDateTime(DateTime.Today);
             CadriDb.TransfersInfo.Update(endInfo);
+        }
+
+        private async Task AddInfoToEmployeeAsync(Employee employee)
+        {
             var info = new TransferEmployeeInfo
             {
                 EmployeeId = employee.Id,
-                OfficeId = (int)employee.CurrentOfficeId,
+                OfficeId = (int) employee.CurrentOfficeId,
                 StartWork = DateOnly.FromDateTime(DateTime.Today)
             };
             await CadriDb.TransfersInfo.AddAsync(info);
-            await CadriDb.SaveChangesAsync();
         }
 
         public async Task DismissEmployeeAsync(Employee employee)
         {
             employee.CurrentOfficeId = null;
             employee.WorkNow = false;
-            var endInfo = await CadriDb.TransfersInfo.FirstAsync(x => x.EmployeeId == employee.Id && x.EndWork == null);
-            endInfo.EndWork = DateOnly.FromDateTime(DateTime.Today);
-            CadriDb.TransfersInfo.Update(endInfo);
+            await CloseCurrentEmployeeInfoAsync(employee);
             CadriDb.Employees.Update(employee);
             await CadriDb.SaveChangesAsync();
         }

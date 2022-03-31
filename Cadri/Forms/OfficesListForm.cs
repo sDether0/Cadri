@@ -109,17 +109,17 @@ namespace Cadri.UI.Forms
             {
                 if (dateRange.FromDate == DateTime.Today)
                 {
-                    result= await employeeRepository.GetEmployeeByOffice(office);
+                    result= await employeeRepository.GetEmployeeByOfficeAsync(office);
                 }
                 else
                 {
                     if (dateRange.ToDate == DateTime.Today)
                     {
-                        result= await employeeRepository.GetEmployeeByOfficeAndDate(office,dateRange.fromDate);
+                        result= await employeeRepository.GetEmployeeByOfficeAndDateAsync(office,dateRange.fromDate);
                     }
                     else
                     {
-                        result= await employeeRepository.GetEmployeeByOfficeAndDate(office,dateRange.fromDate, dateRange.toDate);
+                        result= await employeeRepository.GetEmployeeByOfficeAndDateAsync(office,dateRange.fromDate, dateRange.toDate);
                     }
                 }
 
@@ -136,7 +136,7 @@ namespace Cadri.UI.Forms
             }
             try
             {
-                await officeRepository.CloseOffice((Office) officesGridView.SelectedRows[0].DataBoundItem);
+                await officeRepository.CloseOfficeAsync((Office) officesGridView.SelectedRows[0].DataBoundItem);
             }
             catch (Exception exception)
             {
@@ -153,7 +153,7 @@ namespace Cadri.UI.Forms
             }
             var office = (Office) officesGridView.SelectedRows[0].DataBoundItem;
             if (office.Closed)
-                await officeRepository.RestoreOffice(office);
+                await officeRepository.RestoreOfficeAsync(office);
             else
             {
                 MessageBox.Show("Подразделение не закрыто и не нуждается в восстановлении.");
