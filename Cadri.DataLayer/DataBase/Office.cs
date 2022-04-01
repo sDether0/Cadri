@@ -14,9 +14,7 @@ namespace Cadri.DataLayer.DataBase
         [Key]
         public int Id { get; set; }
         public int? ParentId { get; set; }
-        [JsonIgnore]
         public virtual Office ParentOffice { get; set; }
-        [JsonIgnore]
         [ForeignKey("ParentId")]
         public virtual ICollection<Office> ChildOffices { get; set; }
         public string Name { get; set; }

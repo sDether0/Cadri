@@ -39,7 +39,10 @@ namespace Cadri.DataLayer.Repository
             {
                 ids = (await CadriDb.TransfersInfo.ToListAsync()).Where(x =>
                         x.OfficeId == office.Id &&
-                        ((from <= x.StartWork && to >= x.StartWork) || (to >= x.EndWork && from <= x.EndWork)))
+                        ((from <= x.StartWork && to >= x.StartWork) ||
+                         (from <= x.EndWork && to >= x.EndWork) ||
+                         (from <= x.StartWork && to >= x.EndWork)||
+                         (from >= x.StartWork && to <= x.EndWork)))
                     .Select(x => x.EmployeeId).ToList();
             }
             else
@@ -74,8 +77,10 @@ namespace Cadri.DataLayer.Repository
 
         public async Task RestoreEmployeeAsync(Employee employee)
         {
+            employee.WorkNow = true;
             CadriDb.Entry(employee).State = EntityState.Modified;
             CadriDb.Employees.Update(employee);
+            await CadriDb.SaveChangesAsync();
             await AddInfoToEmployeeAsync(employee);
             await CadriDb.SaveChangesAsync();
         }
@@ -84,6 +89,7 @@ namespace Cadri.DataLayer.Repository
         {
             CadriDb.Entry(employee).State = EntityState.Modified;
             CadriDb.Employees.Update(employee);
+            await CadriDb.SaveChangesAsync();
             await CloseCurrentEmployeeInfoAsync(employee);
             await AddInfoToEmployeeAsync(employee);
             await CadriDb.SaveChangesAsync();

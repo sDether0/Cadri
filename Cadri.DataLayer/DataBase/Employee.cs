@@ -18,10 +18,8 @@ namespace Cadri.DataLayer.DataBase
         public string ThirdName { get; set; }
         public bool WorkNow { get; set; } = true;
         public int? CurrentOfficeId { get; set; }
-        [JsonIgnore]
         [ForeignKey("CurrentOfficeId")]
         public virtual Office? CurrentOffice { get; set; }
-        [JsonIgnore]
         public virtual ICollection<TransferEmployeeInfo> Infos { get; set; }
 
 

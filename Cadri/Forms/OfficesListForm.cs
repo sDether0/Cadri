@@ -35,6 +35,8 @@ namespace Cadri.UI.Forms
             toDatePicker.MaxDate = DateTime.Today;
             fromDatePicker.DataBindings.Add(nameof(DateTimePicker.Value), dateRange, nameof(DateRange.FromDate), true,
                 DataSourceUpdateMode.OnPropertyChanged);
+            fromDatePicker.DataBindings.Add(nameof(DateTimePicker.MaxDate), dateRange, nameof(DateRange.ToDate), true,
+                DataSourceUpdateMode.OnPropertyChanged);
             toDatePicker.DataBindings.Add(nameof(DateTimePicker.MinDate), dateRange, nameof(DateRange.FromDate), true,
                 DataSourceUpdateMode.OnPropertyChanged);
             toDatePicker.DataBindings.Add(nameof(DateTimePicker.Value), dateRange, nameof(DateRange.ToDate), true,

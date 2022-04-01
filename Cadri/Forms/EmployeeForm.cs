@@ -15,7 +15,7 @@ namespace Cadri.UI.Forms
 {
     public partial class EmployeeForm : Form
     {
-        private bool edit;
+        private bool _edit;
         private Employee employee;
         private EmployeeRepository employeeRepository = new ();
         private OfficeRepository officeRepository = new ();
@@ -30,6 +30,7 @@ namespace Cadri.UI.Forms
 
         private void SetFields(bool edit)
         {
+            _edit = edit;
             firstname_tb.Enabled = !edit;
             lastname_tb.Enabled = !edit;
             thirdname_tb.Enabled = !edit;
@@ -53,7 +54,7 @@ namespace Cadri.UI.Forms
 
         private async Task Employ_ClickAsync(object sender, EventArgs e)
         {
-            if (!edit)
+            if (!_edit)
             {
                 bool error = false;
                 error = CheckValid(error);
